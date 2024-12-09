@@ -33,3 +33,6 @@ client.on('message', (channel, tags, message, self) => {
 });
 
 console.log('Bot démarré...');
+console.log("TWITCH_USERNAME:", process.env.TWITCH_USERNAME);
+console.log("TWITCH_OAUTH:", process.env.TWITCH_OAUTH);
+console.log("TWITCH_CHANNEL:", process.env.TWITCH_CHANNEL);
