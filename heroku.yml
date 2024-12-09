@@ -1,7 +1,9 @@
 build:
   docker:
-    web: Dockerfile
+    worker: Dockerfile
 
 run:
-  worker: node bot.js
-
+  worker:
+    command:
+      - node
+      - bot.js
