@@ -3,4 +3,5 @@ build:
     web: Dockerfile
 
 run:
-  web: node bot.js
+  worker: node bot.js
+
