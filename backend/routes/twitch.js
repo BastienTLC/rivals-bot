@@ -43,7 +43,7 @@ router.get('/callback', async (req, res) => {
         try {
             console.log('[INFO] Fetching all players from Rustoria...');
             const players = await fetchAllPlayers();
-            const user = players.find(player => player.twitchUsername === userData.display_name);
+            const user = players.find(player => player.twitchUsername.toLowerCase() === userData.display_name.toLowerCase());
             if (!user) {
                 console.warn(`[WARN] User ${userData.display_name} is not a member of Twitch Rivals.`);
                 res.redirect(`${process.env.FRONT_END_REDIRECTION}/error?message=You are not a member of twitch rivals`);
