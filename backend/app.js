@@ -16,9 +16,11 @@ var app = express();
 // Servir les fichiers statiques de React
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'public')));
-    
+
     app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+        if (!req.originalUrl.startsWith('/api')) {
+            res.sendFile(path.join(__dirname, 'public', 'index.html'));
+        }
     });
   }
 
