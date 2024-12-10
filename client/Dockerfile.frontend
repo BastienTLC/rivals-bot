@@ -6,7 +6,12 @@ COPY . /app
 RUN npm install
 RUN npm run build
 
+# Étape 2 : Servir avec Nginx
 FROM nginx:stable-alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /var/www/html/
-CMD ["nginx","-g","daemon off;"]
+
+# Substituer $PORT avec la valeur fournie par Heroku
+RUN sed -i "s/\$PORT/80/g" /etc/nginx/conf.d/default.conf
+
+CMD ["nginx", "-g", "daemon off;"]
