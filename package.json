@@ -2,12 +2,14 @@
     "name": "rivals-bot",
     "version": "1.0.0",
     "engines": {
-      "node": ">=18.0.0"
+        "node": ">=18.0.0"
     },
     "scripts": {
-      "start": "cd backend && npm start",
-      "build": "cd client && npm install && npm run build",
-      "heroku-postbuild": "cd client && npm install && npm run build"
+        "start": "cd backend && npm start",
+        "build": "cd client && npm install && npm run build",
+        "heroku-postbuild": "cd client && npm install && npm run build"
+    },
+    "dependencies": {
+        "node-cron": "^3.0.3"
     }
-  }
-  
+}
