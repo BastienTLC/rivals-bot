@@ -33,9 +33,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 connectDB().then(r => console.log('connected'));
 
 // Utiliser les routes
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/twitch', twitchRouter);
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/twitch', twitchRouter);
 
 // Gestion des erreurs
 app.use(function (req, res, next) {
