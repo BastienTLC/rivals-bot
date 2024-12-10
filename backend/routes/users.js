@@ -28,4 +28,32 @@ router.post('/', async (req, res) => {
   }
 });
 
+
+// Find user by twitchUsername
+router.get('/:twitchUsername', async (req, res) => {
+  try {
+    const user = await User.findOne({ twitchUsername: req.params.twitchUsername });
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// Delete user by twitchUsername
+router.delete('/:twitchUsername', async (req, res) => {
+  try {
+    const user = await User.findOneAndDelete({ twitchUsername: req.params.twitchUsername });
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;

@@ -1,68 +1,131 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
+  font-family: 'Fredoka One', 'Baloo 2', cursive, sans-serif;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(245, 245, 245, 0.8) 50%, rgba(200, 200, 200, 0.5) 100%);
+  color: #333;
   margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  padding: 0;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2, h3 {
+  color: #2E8B57; /* Vert forêt pour un contraste élégant */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 1.2em;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: transform 0.2s, background-color 0.3s;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+button:hover {
+  transform: scale(1.05);
+  background-color: #5CB85C;
 }
+
+.card {
+  background: rgba(255, 255, 255, 0.3); /* Couleur blanche semi-transparente */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre légère */
+  padding: 20px;
+  margin: 15px;
+  text-align: center;
+  backdrop-filter: blur(10px); /* Effet de flou */
+  -webkit-backdrop-filter: blur(10px); /* Compatibilité Safari */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Bordure subtile */
+  margin-top: -200px; /* Adjust this value to move the card up */
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Positionnez correctement le canvas */
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Assurez que le contenu reste au premier plan */
+.content {
+  position: relative;
+  z-index: 10;
+}
+
+
+/* CustomDataTable.css */
+.p-datatable {
+  border: 1px solid #d4d4d4;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.p-datatable-header {
+  background-color: #f7f9fc;
+  color: #333;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: #f1f5f9;
+  color: #212529;
+  text-align: left;
+  font-size: 1rem;
+  border: none;
+  padding: 12px 10px;
+  transition: background-color 0.3s;
+}
+
+.p-datatable .p-datatable-thead > tr > th:hover {
+  background-color: #e0e7ff;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background-color 0.3s;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #f8fafc;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  font-size: 0.95rem;
+  padding: 10px 8px;
+  color: #495057;
+  border: none;
+}
+
+.p-datatable .p-paginator {
+  background-color: #f7f9fc;
+  border-top: 1px solid #d4d4d4;
+}
+
+.p-datatable .p-paginator .p-paginator-current {
+  font-weight: bold;
+  color: #495057;
+}
+
+.p-datatable .p-paginator .p-paginator-icon {
+  color: #6b7280;
+}
+
+.p-datatable .p-paginator .p-paginator-icon:hover {
+  color: #1d4ed8;
+}
+

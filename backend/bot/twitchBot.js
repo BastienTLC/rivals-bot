@@ -79,7 +79,8 @@ async function handleTeamRankCommand(client, channel, teamName) {
 async function handleStatsCommand(client, channel, playerName) {
     if (!playerName) {
         client.say(channel, `❗ Utilisation: !stats {playerName}`).catch(err => console.error(err));
-        return;
+        //playerName = channel sans le premier caractère
+        playerName = channel.slice(1);
     }
 
     try {
@@ -148,7 +149,8 @@ async function handleStatsCommand(client, channel, playerName) {
             `📊 Stats de ${playerName} (${player.teamName}) : ` +
             `Kills: ${kills}💀 | Deaths: ${deaths}⚰️ | KD: ${kdRatio}💥 | HS: ${headshots}🎯 | Acc: ${accDisplay}🔫 | ` +
             `Items: ${itemsCrafted}🛠️ | Damage: ${Math.round(damageDone)}💢 | NPC: ${npcKills}👾 | Animals: ${animalKills}🐗 | ` +
-            `Ressources: ${totalResources}🪓`
+            `Ressources: ${totalResources}🪓 | ` +
+            `Link: ${process.env.FRONT_END_REDIRECTION}/customs/${playerName}`
         ).catch(err => console.error(err));
 
     } catch (err) {

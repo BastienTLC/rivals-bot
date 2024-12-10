@@ -1,20 +1,37 @@
-import React, { useState, useEffect } from 'react';
+// src/App.jsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Home from './pages/Home';
+import Success from './pages/Success';
+import Error from './pages/Error';
+import Background from './component/Background';
+import Customs from './pages/Customs';
 
 function App() {
-    const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
-    const handleAuth = () => {
-        console.log(backendUrl);
-        window.location.href = `https://id.twitch.tv/oauth2/authorize?client_id=v5ow6jdcrqa6s1f5pmvezomn7pgwdm&redirect_uri=${backendUrl}/api/twitch/callback&response_type=code&scope=chat:read+chat:edit`;
-    };
-
+    const location = useLocation();
 
     return (
-        <div>
-            <h1>Bot Twitch</h1>
-            <button onClick={handleAuth}>Connecter ma chaîne</button>
-        </div>
+        <>
+            {/* Afficher Background uniquement sur certaines routes */}
+            {['/', '/success'].includes(location.pathname) && <Background />}
+
+            {/* Contenu principal */}
+            <div style={{ position: 'relative', zIndex: 10 }}>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/success" element={<Success />} />
+                    <Route path="/error" element={<Error />} />
+                    <Route path="/customs/:player" element={<Customs />} />
+                </Routes>
+            </div>
+        </>
     );
 }
 
-export default App;
+export default function AppWrapper() {
+    return (
+        <Router>
+            <App />
+        </Router>
+    );
+}

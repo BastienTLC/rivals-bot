@@ -10,9 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.120.4",
+    "@react-three/fiber": "^8.17.10",
+    "apexcharts": "^4.2.0",
     "axios": "^1.7.9",
+    "primeflex": "^3.3.1",
+    "primeicons": "^7.0.0",
+    "primereact": "^10.8.5",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-apexcharts": "^1.7.0",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.0.2",
+    "three": "^0.171.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
