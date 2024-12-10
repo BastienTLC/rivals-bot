@@ -36,7 +36,7 @@ router.get('/callback', async (req, res) => {
         const userData = userResponse.data.data[0]; // User information is in an array
 
         //get all user from rustoria
-        /*try {
+        try {
             const players = await fetchAllPlayers();
             const user = players.find(player => player.twitchUsername === userData.display_name);
             if (!user) {
@@ -47,7 +47,7 @@ router.get('/callback', async (req, res) => {
             console.error('Error during fetchAllPlayers:', err.message);
             res.redirect(`${process.env.FRONT_END_REDIRECTION}/error?message=Error during fetchAllPlayers`);
             return res.status(500).send('Error during fetchAllPlayers');
-        }*/
+        }
 
 
         // Add or update the user in the database
