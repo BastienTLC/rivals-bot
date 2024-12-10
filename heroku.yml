@@ -1,9 +1,0 @@
-build:
-  docker:
-    worker: Dockerfile
-
-run:
-  worker:
-    command:
-      - node
-      - bot.js
