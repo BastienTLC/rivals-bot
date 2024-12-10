@@ -2,7 +2,6 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var cors = require('cors');
 var { startBot } = require('./bot/twitchBot');
 var connectDB = require('./config/config');
 require('dotenv').config(); // Charger les variables d'environnement
@@ -21,12 +20,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Configurer CORS pour autoriser uniquement FRONT_END_REDIRECTION
-const corsOptions = {
-    origin: process.env.FRONT_END_REDIRECTION,
-    optionsSuccessStatus: 200 // For legacy browser support
-};
-app.use(cors(corsOptions));
 
 // Connexion à la base de données
 connectDB().then(r => console.log('connected'));
