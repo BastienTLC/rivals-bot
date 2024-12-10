@@ -9,11 +9,6 @@ const API_BASE = 'https://rustoria.co/twitch/api';
 
 /**
  * Récupère la liste de toutes les équipes.
- * Retourne un tableau de la forme:
- * [
- *   {id: "teamName", name: "teamName", avatarUrl: null, idTagsDeposited: number, ... },
- *   ...
- * ]
  */
 async function fetchAllTeams() {
     const res = await axios.get(`${API_BASE}/teams`);
@@ -21,17 +16,7 @@ async function fetchAllTeams() {
 }
 
 /**
- * Récupère les détails d'une équipe (dont les membres) :
- * Retourne un objet :
- * {
- *   id: "teamName",
- *   name: "teamName",
- *   cratesHacked: ...,
- *   members: [
- *     { name: "playerName", kills: ..., deaths: ..., accuracy: ..., ... },
- *     ...
- *   ]
- * }
+ * Récupère les détails d'une équipe (dont les membres).
  */
 async function fetchTeamDetails(teamName) {
     const res = await axios.get(`${API_BASE}/teams/${teamName}`);
@@ -46,12 +31,9 @@ async function handleRankCommand(client, channel) {
     try {
         const teams = await fetchAllTeams();
 
-        // Trier les équipes par points décroissants (idTagsDeposited)
+        // Trier par points décroissants
         const sortedTeams = teams.sort((a, b) => b.idTagsDeposited - a.idTagsDeposited);
-
-        const topTeams = sortedTeams.map((team, i) => {
-            return `${i+1}. ${team.name} - ${team.idTagsDeposited} pts 🏅`;
-        }).slice(0, 10); // Affiche top 10
+        const topTeams = sortedTeams.map((team, i) => `${i+1}. ${team.name} - ${team.idTagsDeposited} pts 🏅`).slice(0, 10);
 
         client.say(channel, `🌍 Classement global des équipes : ${topTeams.join(' | ')}`).catch(err => console.error(err));
     } catch (err) {
@@ -62,7 +44,7 @@ async function handleRankCommand(client, channel) {
 
 /**
  * Commande !teamrank {teamName}
- * Affiche le classement des joueurs d'une équipe par kills.
+ * Affiche le classement interne d'une équipe par kills.
  */
 async function handleTeamRankCommand(client, channel, teamName) {
     if (!teamName) {
@@ -90,7 +72,9 @@ async function handleTeamRankCommand(client, channel, teamName) {
 
 /**
  * Commande !stats {playerName}
- * Cherche le joueur dans toutes les équipes. Une fois trouvé, affiche des stats détaillées.
+ * On récupère d'abord TOUTES les équipes, puis pour chacune, on récupère leurs membres.
+ * On stocke tous les joueurs dans un tableau allPlayers avec leur équipe.
+ * Ensuite, on recherche le player demandé.
  */
 async function handleStatsCommand(client, channel, playerName) {
     if (!playerName) {
@@ -100,43 +84,53 @@ async function handleStatsCommand(client, channel, playerName) {
 
     try {
         const teams = await fetchAllTeams();
+        const allPlayers = [];
 
-        // On parcourt chaque équipe jusqu'à trouver le joueur
+        // On récupère tous les joueurs de toutes les équipes
         for (const team of teams) {
             const teamData = await fetchTeamDetails(team.name);
             if (teamData && teamData.members) {
-                const player = teamData.members.find(m => m.name.toLowerCase() === playerName.toLowerCase());
-                if (player) {
-                    // Joueur trouvé, on affiche ses stats
-                    const kills = player.kills ?? 0;
-                    const deaths = player.deaths ?? 0;
-                    const kdr = player.kdr !== undefined ? player.kdr.toFixed(2) : 'N/A';
-                    const headshots = player.headshots ?? 0;
-                    const accuracy = player.accuracy !== undefined ? player.accuracy + '%' : 'N/A';
-                    const damageDone = player.damageDone ?? 0;
-                    const itemsCrafted = player.itemsCrafted ?? 0;
-                    const npcKills = player.npcKills ?? 0;
-                    const animalKills = player.animalKills ?? 0;
-
-                    // On peut aussi compter les ressources collectées
-                    let totalResources = 0;
-                    if (player.collectedResources && Array.isArray(player.collectedResources)) {
-                        totalResources = player.collectedResources.reduce((sum, r) => sum + (r.amount ?? 0), 0);
-                    }
-
-                    client.say(channel,
-                        `📊 Stats de ${playerName} (${teamData.name}) : ` +
-                        `Kills: ${kills}💀 | Deaths: ${deaths}⚰️ | KD: ${kdr}💥 | HS: ${headshots}🎯 | Acc: ${accuracy}🔫 | ` +
-                        `Items: ${itemsCrafted}🛠️ | Damage: ${Math.round(damageDone)}💢 | NPC: ${npcKills}👾 | Animals: ${animalKills}🐗 | ` +
-                        `Ressources: ${totalResources}🪓`
-                    ).catch(err => console.error(err));
-                    return;
-                }
+                // On ajoute chaque membre avec une info sur son équipe
+                teamData.members.forEach(member => {
+                    allPlayers.push({
+                        ...member,
+                        teamName: teamData.name
+                    });
+                });
             }
         }
 
-        // Si on arrive ici, le joueur n'a pas été trouvé
-        client.say(channel, `❗ Joueur ${playerName} non trouvé dans aucune équipe.`).catch(err => console.error(err));
+        // Maintenant, on cherche le joueur dans allPlayers
+        const player = allPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+
+        if (!player) {
+            client.say(channel, `❗ Joueur ${playerName} non trouvé dans aucune équipe.`).catch(err => console.error(err));
+            return;
+        }
+
+        // Joueur trouvé, affichons les stats
+        const kills = player.kills ?? 0;
+        const deaths = player.deaths ?? 0;
+        const kdr = player.kdr !== undefined ? player.kdr.toFixed(2) : 'N/A';
+        const headshots = player.headshots ?? 0;
+        const accuracy = player.accuracy !== undefined ? player.accuracy + '%' : 'N/A';
+        const damageDone = player.damageDone ?? 0;
+        const itemsCrafted = player.itemsCrafted ?? 0;
+        const npcKills = player.npcKills ?? 0;
+        const animalKills = player.animalKills ?? 0;
+
+        let totalResources = 0;
+        if (player.collectedResources && Array.isArray(player.collectedResources)) {
+            totalResources = player.collectedResources.reduce((sum, r) => sum + (r.amount ?? 0), 0);
+        }
+
+        client.say(channel,
+            `📊 Stats de ${playerName} (${player.teamName}) : ` +
+            `Kills: ${kills}💀 | Deaths: ${deaths}⚰️ | KD: ${kdr}💥 | HS: ${headshots}🎯 | Acc: ${accuracy}🔫 | ` +
+            `Items: ${itemsCrafted}🛠️ | Damage: ${Math.round(damageDone)}💢 | NPC: ${npcKills}👾 | Animals: ${animalKills}🐗 | ` +
+            `Ressources: ${totalResources}🪓`
+        ).catch(err => console.error(err));
+
     } catch (err) {
         console.error(err.message);
         client.say(channel, `❗ Erreur lors de la récupération des stats du joueur.`).catch(e => console.error(e));
@@ -164,10 +158,10 @@ async function handleTeamsCommand(client, channel) {
  */
 function handleHelpCommand(client, channel) {
     const helpMessage = `📜 Liste des commandes :
-!rank - Affiche le classement global des équipes par points.
-!teamrank {teamName} - Affiche le classement interne d'une équipe (par kills).
-!stats {playerName} - Affiche les stats détaillées d'un joueur (toutes équipes confondues).
-!teams - Liste toutes les équipes disponibles.
+!rank - Classement global des équipes par points.
+!teamrank {teamName} - Classement interne d'une équipe par kills.
+!stats {playerName} - Stats détaillées d'un joueur (toutes équipes).
+!teams - Liste toutes les équipes.
 !help - Affiche cette aide.
 `;
 
@@ -188,19 +182,19 @@ async function loadChannels() {
         for (const user of users) {
             const { twitchUsername, twitchToken } = user;
 
-            // Vérifiez que les informations nécessaires sont présentes
+            // Vérifier si infos nécessaires présentes
             if (!twitchUsername || !twitchToken) {
                 console.error(`Utilisateur ${twitchUsername || 'inconnu'} a des informations manquantes.`);
                 continue;
             }
 
-            // Vérifier si un bot est déjà lancé pour cet utilisateur
+            // Vérifier si un bot est déjà lancé
             if (clients[twitchUsername]) {
                 console.log(`Un bot est déjà en cours d'exécution pour ${twitchUsername}, on passe.`);
                 continue;
             }
 
-            // Configuration du bot pour cet utilisateur
+            // Configuration du bot
             const botOptions = {
                 options: { debug: false },
                 connection: {
@@ -238,7 +232,7 @@ async function loadChannels() {
                         await handleTeamsCommand(client, channel);
                         break;
                     default:
-                        // Commande inconnue, on ne fait rien ou on pourrait envoyer un msg d'erreur
+                        // Commande inconnue
                         break;
                 }
             });
