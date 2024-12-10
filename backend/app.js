@@ -4,7 +4,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var { startBot } = require('./bot/twitchBot');
 var connectDB = require('./config/config');
+
+const cron = require('node-cron');
 require('dotenv').config(); // Charger les variables d'environnement
+var { refreshAllTokens } = require('./scheduled/scheduled');
 
 // Importer les routes
 var indexRouter = require('./routes/index');
@@ -57,5 +60,16 @@ app.use(function (err, req, res, next) {
 
 // Démarrer le bot Twitch
 startBot().then(r => console.log("started"));
+
+cron.schedule('0 * * * *', async () => {
+    console.log('Scheduled task triggered...');
+    try {
+        await refreshAllTokens();
+        console.log('Scheduled task completed.');
+    } catch (err) {
+        console.error('Error in scheduled task:', err.message);
+    }
+});
+
 
 module.exports = app;
