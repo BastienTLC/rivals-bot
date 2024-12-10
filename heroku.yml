@@ -1,8 +1,6 @@
 build:
   docker:
-    web: ./client/Dockerfile.frontend
-    backend: ./backend/Dockerfile.backend
+    web: ./Dockerfile
 
 run:
-  web: /usr/sbin/nginx -g 'daemon off;'       # Pour le frontend
-  backend: node /app/bin/www                  # Pour le backend
+  web: node /app/bin/www
