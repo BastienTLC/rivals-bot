@@ -13,24 +13,29 @@ var twitchRouter = require('./routes/twitch');
 
 var app = express();
 
+// Servir les fichiers statiques de React
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, 'public')));
+    
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+  }
+
 // Middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-// Servir les fichiers statiques du frontend
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connexion à la base de données
-connectDB()
-    .then(() => console.log('Database connected'))
-    .catch(err => console.error('Database connection error:', err));
+connectDB().then(r => console.log('connected'));
 
-// Utiliser les routes API
-app.use('/api', indexRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/twitch', twitchRouter);
+// Utiliser les routes
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/twitch', twitchRouter);
 
 // Gestion des erreurs
 app.use(function (req, res, next) {
@@ -44,14 +49,6 @@ app.use(function (err, req, res, next) {
     res.json({ error: err.message });
 });
 
-// Rediriger toutes les autres routes vers le frontend (SPA fallback)
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Démarrer le bot Twitch
-startBot()
-    .then(() => console.log("Twitch bot started"))
-    .catch(err => console.error("Error starting Twitch bot:", err));
+startBot().then(r => console.log("started")); // Démarrer le bot Twitch
 
 module.exports = app;

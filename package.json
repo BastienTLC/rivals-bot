@@ -1,0 +1,12 @@
+{
+    "name": "rivals-bot",
+    "version": "1.0.0",
+    "engines": {
+      "node": ">=18.0.0"
+    },
+    "scripts": {
+      "start": "cd backend && npm start",
+      "build": "cd client && npm install && npm run build",
+      "heroku-postbuild": "cd client && npm install && npm run build"
+    }
+  }
