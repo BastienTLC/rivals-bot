@@ -18,23 +18,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Connexion à la base de données
 connectDB().then(r => console.log('connected'));
 
-// Servir les fichiers statiques du frontend
-const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
-
 // Utiliser les routes
-app.use('/api', indexRouter); // Préfixez vos API avec `/api`
-app.use('/api/users', usersRouter);
-app.use('/api/twitch', twitchRouter);
-
-// Catch-all pour rediriger toutes les requêtes vers l'index.html du frontend
-app.get('*', (req, res) => {
-    res.sendFile(path.join(publicPath, 'index.html'));
-});
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+app.use('/twitch', twitchRouter);
 
 // Gestion des erreurs
 app.use(function (req, res, next) {
@@ -48,7 +40,6 @@ app.use(function (err, req, res, next) {
     res.json({ error: err.message });
 });
 
-// Démarrer le bot Twitch
-startBot().then(r => console.log("started"));
+startBot().then(r => console.log("started")); // Démarrer le bot Twitch
 
 module.exports = app;
