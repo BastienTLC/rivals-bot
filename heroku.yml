@@ -1,0 +1,8 @@
+build:
+  docker:
+    web: ./Dockerfile.frontend
+    backend: ./Dockerfile.backend
+
+run:
+  web: nginx -g 'daemon off;'
+  backend: node bin/www
