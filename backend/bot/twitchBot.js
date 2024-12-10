@@ -83,56 +83,76 @@ async function handleStatsCommand(client, channel, playerName) {
     }
 
     try {
+        // Récupère la liste de toutes les équipes
         const teams = await fetchAllTeams();
-        const allPlayers = [];
 
-        // On récupère tous les joueurs de toutes les équipes
-        for (const team of teams) {
-            const teamData = await fetchTeamDetails(team.name);
-            if (teamData && teamData.members) {
-                // On ajoute chaque membre avec une info sur son équipe
-                teamData.members.forEach(member => {
+        // Récupère les données détaillées de chaque équipe en parallèle
+        const teamsData = await Promise.all(
+            teams.map(team => fetchTeamDetails(team.id).catch(() => null))
+        );
+
+        // Construit un tableau global de tous les joueurs de toutes les équipes
+        const allPlayers = [];
+        for (const teamData of teamsData) {
+            if (teamData && Array.isArray(teamData.members)) {
+                // On itère sur chaque membre pour l'ajouter au tableau global
+                for (const member of teamData.members) {
                     allPlayers.push({
                         ...member,
                         teamName: teamData.name
                     });
-                });
+                }
             }
         }
 
-        // Maintenant, on cherche le joueur dans allPlayers
-        const player = allPlayers.find(p => p.name.toLowerCase() === playerName.toLowerCase());
+        // Recherche du joueur dans ce tableau global (insensible à la casse)
+        let player = null;
+        for (const p of allPlayers) {
+            if (p.name.toLowerCase() === playerName.toLowerCase()) {
+                player = p;
+                break;
+            }
+        }
 
         if (!player) {
             client.say(channel, `❗ Joueur ${playerName} non trouvé dans aucune équipe.`).catch(err => console.error(err));
             return;
         }
 
-        // Joueur trouvé, affichons les stats
-        const kills = player.kills ?? 0;
-        const deaths = player.deaths ?? 0;
-        const kdr = player.kdr !== undefined ? player.kdr.toFixed(2) : 'N/A';
-        const headshots = player.headshots ?? 0;
-        const accuracy = player.accuracy !== undefined ? player.accuracy + '%' : 'N/A';
-        const damageDone = player.damageDone ?? 0;
-        const itemsCrafted = player.itemsCrafted ?? 0;
-        const npcKills = player.npcKills ?? 0;
-        const animalKills = player.animalKills ?? 0;
+        // Extraction des stats avec valeurs par défaut
+        const {
+            kills = 0,
+            deaths = 0,
+            kdr,
+            headshots = 0,
+            accuracy,
+            damageDone = 0,
+            itemsCrafted = 0,
+            npcKills = 0,
+            animalKills = 0,
+            collectedResources
+        } = player;
 
+        // Conversion du K/D ratio s'il est disponible
+        const kdRatio = (typeof kdr === 'number') ? kdr.toFixed(2) : 'N/A';
+        const accDisplay = (typeof accuracy === 'number') ? `${accuracy}%` : 'N/A';
+
+        // Calcul des ressources totales collectées
         let totalResources = 0;
-        if (player.collectedResources && Array.isArray(player.collectedResources)) {
-            totalResources = player.collectedResources.reduce((sum, r) => sum + (r.amount ?? 0), 0);
+        if (Array.isArray(collectedResources)) {
+            totalResources = collectedResources.reduce((sum, r) => sum + (r.amount || 0), 0);
         }
 
+        // Affichage des stats dans le chat
         client.say(channel,
             `📊 Stats de ${playerName} (${player.teamName}) : ` +
-            `Kills: ${kills}💀 | Deaths: ${deaths}⚰️ | KD: ${kdr}💥 | HS: ${headshots}🎯 | Acc: ${accuracy}🔫 | ` +
+            `Kills: ${kills}💀 | Deaths: ${deaths}⚰️ | KD: ${kdRatio}💥 | HS: ${headshots}🎯 | Acc: ${accDisplay}🔫 | ` +
             `Items: ${itemsCrafted}🛠️ | Damage: ${Math.round(damageDone)}💢 | NPC: ${npcKills}👾 | Animals: ${animalKills}🐗 | ` +
             `Ressources: ${totalResources}🪓`
         ).catch(err => console.error(err));
 
     } catch (err) {
-        console.error(err.message);
+        console.error('Erreur dans handleStatsCommand:', err.message);
         client.say(channel, `❗ Erreur lors de la récupération des stats du joueur.`).catch(e => console.error(e));
     }
 }
