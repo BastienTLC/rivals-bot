@@ -2,10 +2,14 @@ const tmi = require('tmi.js');
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 
 // Initialiser Express
 const app = express();
 app.use(bodyParser.json());
+
+// Servir les fichiers statiques depuis le répertoire public
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Charger config.json
 let config = {};
@@ -26,8 +30,8 @@ app.post('/save-token', (req, res) => {
     res.send('Token enregistré avec succès');
 });
 
-// Route pour vérifier le statut
-app.get('/', (req, res) => {
+// Route pour vérifier le statut (facultatif)
+app.get('/status', (req, res) => {
     res.send('Bot Twitch en cours d\'exécution');
 });
 

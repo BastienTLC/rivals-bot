@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Connecter votre chaîne Twitch</h1>
-<a href="https://id.twitch.tv/oauth2/authorize?client_id=v5ow6jdcrqa6s1f5pmvezomn7pgwdm&redirect_uri=http://localhost:3000&response_type=token&scope=chat:read+chat:edit">
+<a href="https://id.twitch.tv/oauth2/authorize?client_id=v5ow6jdcrqa6s1f5pmvezomn7pgwdm&redirect_uri=https://rivals-app-016dc0f44b91.herokuapp.com/&response_type=token&scope=chat:read+chat:edit">
     Autoriser le Bot
 </a>
 
@@ -19,7 +19,7 @@
         const token = params.get('access_token');
 
         // Envoyer le token au serveur pour le stocker dans config.json
-        fetch('/save-token', {
+        fetch('https://rivals-app-016dc0f44b91.herokuapp.com/save-token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
