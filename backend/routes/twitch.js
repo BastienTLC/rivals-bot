@@ -40,7 +40,7 @@ router.get('/callback', async (req, res) => {
         console.log(`[INFO] User information retrieved: ${userData.display_name}.`);
 
         // Vérifier si l'utilisateur est membre de Rustoria
-        try {
+        /*try {
             console.log('[INFO] Fetching all players from Rustoria...');
             const players = await fetchAllPlayers();
             const user = players.find(player => player.twitchUsername.toLowerCase() === userData.display_name.toLowerCase());
@@ -54,7 +54,7 @@ router.get('/callback', async (req, res) => {
             console.error('[ERROR] Error during fetchAllPlayers:', err.message);
             res.redirect(`${process.env.FRONT_END_REDIRECTION}/error?message=Error during fetchAllPlayers`);
             return res.status(500).send('Error during fetchAllPlayers');
-        }
+        }*/
 
         // Ajouter ou mettre à jour l'utilisateur dans la base de données
         console.log(`[INFO] Checking database for user: ${userData.display_name}`);
