@@ -13,8 +13,8 @@ RUN npm install --production
 # Copier tout le contenu de votre projet dans le conteneur
 COPY . .
 
-# Exposer le port 3000 (si votre bot écoute un port spécifique, sinon inutile pour un bot Twitch)
-# EXPOSE 3000
+# Exposer le port utilisé par Express (important pour Heroku)
+EXPOSE 3000
 
 # Définir la commande pour démarrer l'application
 CMD ["node", "bot.js"]

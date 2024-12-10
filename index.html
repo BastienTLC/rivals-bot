@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurer le Bot Twitch</title>
+</head>
+<body>
+<h1>Connecter votre chaîne Twitch</h1>
+<a href="https://id.twitch.tv/oauth2/authorize?client_id=v5ow6jdcrqa6s1f5pmvezomn7pgwdm&redirect_uri=http://localhost:3000&response_type=token&scope=chat:read+chat:edit">
+    Autoriser le Bot
+</a>
+
+<script>
+    // Lecture de l'URL pour récupérer le token après redirection
+    const hash = window.location.hash;
+    if (hash.includes('access_token')) {
+        const params = new URLSearchParams(hash.slice(1));
+        const token = params.get('access_token');
+
+        // Envoyer le token au serveur pour le stocker dans config.json
+        fetch('/save-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Token enregistré avec succès !');
+                } else {
+                    alert('Erreur lors de l\'enregistrement du token.');
+                }
+            });
+    }
+</script>
+</body>
+</html>
