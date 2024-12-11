@@ -44,7 +44,7 @@ function Recap() {
             try {
                 console.log(`Fetching player data for channel: ${channel}`);
                 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-                const response = await axios.get(`${backendUrl}/api/rustData/players/${channel}`);
+                const response = await axios.get(`${backendUrl}/api/twitch/player/${channel}`);
                 console.log('Player data fetched:', response.data);
                 setPlayerData(response.data);
 
