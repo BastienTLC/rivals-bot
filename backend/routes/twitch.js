@@ -3,6 +3,8 @@ const axios = require('axios');
 const User = require('../model/User'); // Modèle MongoDB pour les utilisateurs
 const { startBot } = require('../bot/twitchBot'); // Fonction pour charger les chaînes
 const { fetchAllPlayers } = require('../rustApi/fetchData'); // Fonction pour récupérer les joueurs
+const { getSelectedPlayer } = require('../utils/selectedPlayers');
+
 const router = express.Router();
 
 router.get('/callback', async (req, res) => {
@@ -111,6 +113,20 @@ router.get('/user', async (req, res) => {
         console.error('[ERROR] Error fetching user information:', err.message);
         res.status(500).send('Erreur lors de la récupération de l\'utilisateur');
     }
+});
+
+router.get('/player/:channel', (req, res) => {
+    const { channel } = req.params;
+
+    console.log(`[INFO] Requête pour le joueur sélectionné dans le channel: ${channel}`);
+    const playerData = getSelectedPlayer(channel.toLowerCase()); // Les noms de channel incluent un #
+
+    if (!playerData) {
+        console.error(`[ERROR] Aucun joueur sélectionné pour le channel: ${channel}`);
+        return res.status(404).json({ error: 'Aucun joueur sélectionné pour ce channel.' });
+    }
+
+    res.json(playerData);
 });
 
 module.exports = router;

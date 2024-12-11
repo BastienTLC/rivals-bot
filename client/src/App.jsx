@@ -6,6 +6,7 @@ import Success from './pages/Success';
 import Error from './pages/Error';
 import Background from './component/Background';
 import Customs from './pages/Customs';
+import Recap from "./pages/Recap.jsx";
 
 function App() {
     const location = useLocation();
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/success" element={<Success />} />
                     <Route path="/error" element={<Error />} />
                     <Route path="/customs/:player" element={<Customs />} />
+                    <Route path="/recap/:channel" element={<Recap />} />
                 </Routes>
             </div>
         </>

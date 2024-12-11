@@ -1,0 +1,84 @@
+.recap-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: transparent; /* Fond transparent */
+    padding: 2rem;
+}
+
+.player-card {
+    background: rgba(0, 0, 0, 0.6); /* Fond sombre avec gradient */
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Ombre plus forte pour mieux ressortir */
+    padding: 30px;
+    text-align: center;
+    backdrop-filter: blur(12px); /* Effet de flou pour l'élégance */
+    -webkit-backdrop-filter: blur(12px); /* Compatibilité Safari */
+    border: 2px solid rgba(255, 255, 255, 0.4); /* Bordure lumineuse subtile */
+    max-width: 600px; /* Limite la taille de la carte */
+    width: 100%;
+}
+
+.player-name {
+    font-family: 'Roboto', sans-serif;
+    font-size: 3rem; /* Texte très grand */
+    font-weight: bold;
+    color: #7fCC00; /* Couleur vert pomme */
+    margin-bottom: 1rem;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Ombre plus marquée */
+}
+
+.player-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
+    gap: 15px; /* Espacement plus large */
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.5rem; /* Texte plus grand */
+    color: #ffffff;
+}
+
+.player-stats div {
+    text-align: left;
+    padding: 10px 15px; /* Plus d'espace autour du texte */
+    background: rgba(255, 255, 255, 0.1); /* Fond transparent léger */
+    border-radius: 10px; /* Coins arrondis */
+    font-size: 1.5rem; /* Texte plus grand */
+}
+
+.player-stats div strong {
+    color: #7fCC00; /* Met en valeur les titres en vert pomme */
+}
+
+@keyframes scroll-infinite {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
+
+.team-cards {
+    position: relative;
+    height: 600px; /* Hauteur visible du conteneur */
+    overflow: hidden; /* Masque les cartes hors du cadre */
+    display: flex;
+    flex-direction: column; /* Aligne les cartes en colonne */
+}
+
+.team-card-container {
+    display: flex;
+    flex-direction: column; /* Aligne les cartes verticalement */
+    animation: scroll-infinite linear infinite;
+    animation-duration: var(--scroll-duration, 100s); /* Utilise la variable ou 5s par défaut */
+    width: 800px;
+    padding-left: 100px;
+}
+
+
+
+.team-card {
+    flex: 0 0 auto; /* Empêche les cartes de se redimensionner */
+    margin: 15px 0; /* Espacement entre les cartes */
+}

@@ -1,6 +1,8 @@
 const tmi = require('tmi.js');
 const axios = require('axios');
 const User = require('../model/User'); // Modèle MongoDB pour charger les utilisateurs
+const { setSelectedPlayer } = require('../utils/selectedPlayers');
+
 
 // Liste des clients connectés, sous forme d'un objet { [twitchUsername]: client }
 const clients = {};
@@ -119,6 +121,8 @@ async function handleStatsCommand(client, channel, playerName) {
             client.say(channel, `❗ Joueur ${playerName} non trouvé dans aucune équipe.`).catch(err => console.error(err));
             return;
         }
+
+        setSelectedPlayer(channel.slice(1).toLowerCase(), player);
 
         // Extraction des stats avec valeurs par défaut
         const {

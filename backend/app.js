@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var cors = require('cors'); // Import the cors package
 var { startBot } = require('./bot/twitchBot');
 var connectDB = require('./config/config');
 
@@ -22,7 +23,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(cors()); // Use the cors middleware
 
 // Connexion à la base de données
 connectDB().then(r => console.log('connected'));
@@ -70,6 +71,5 @@ cron.schedule('0 * * * *', async () => {
         console.error('Error in scheduled task:', err.message);
     }
 });
-
 
 module.exports = app;
