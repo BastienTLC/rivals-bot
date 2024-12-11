@@ -17,7 +17,7 @@ function Recap() {
     const [channelData, setChannelData] = useState(null);
     const [teamData, setTeamData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [displayMode, setDisplayMode] = useState('team'); // 'single' or 'team'
+    const [displayMode, setDisplayMode] = useState('single'); // 'single' or 'team'
     const [lastFetchedName, setLastFetchedName] = useState(null);
     const [counter, setCounter] = useState(0); // Counter to track time
     const [scrollSpeed, setScrollSpeed] = useState(100); // Vitesse par défaut : 5s
@@ -56,9 +56,8 @@ function Recap() {
                 } else {
                     setCounter(prev => prev + 5); // Increment counter if player is the same
                 }
-                if (playerData === null) {
-                    console.log('Player data is null, setting player data');
-                    setDisplayMode('team');
+                if (lastFetchedName === null){
+                    setDisplayMode('single'); // Ensure single mode is active when player is updated
                 }
             } catch (err) {
                 console.error("Erreur lors de la récupération des données du joueur:", err);
@@ -85,7 +84,7 @@ function Recap() {
             return;
         }
 
-        if (counter >= 30) {
+        if (counter >= 20) {
             console.log(`Fetching team data for team: ${playerData.teamName}`);
             const fetchTeamData = async () => {
                 try {
