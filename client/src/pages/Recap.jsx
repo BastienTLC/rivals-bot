@@ -131,13 +131,13 @@ function Recap() {
                         <strong>Deaths:</strong> {player.deaths}
                     </div>
                     <div>
-                        <strong>KD Ratio:</strong> {player.kdr?.toFixed(2) || 'N/A'}
+                        <strong>KD:</strong> {player.kdr?.toFixed(2) || 'N/A'}
                     </div>
                     <div>
                         <strong>Accuracy:</strong> {player.accuracy}%
                     </div>
                     <div>
-                        <strong>Damage Done:</strong> {Math.round(player.damageDone)}
+                        <strong>Damage:</strong> {Math.round(player.damageDone)}
                     </div>
                 </div>
             </Card>

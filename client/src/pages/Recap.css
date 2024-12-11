@@ -7,6 +7,7 @@
     padding: 2rem;
 }
 
+
 .player-card {
     background: rgba(0, 0, 0, 0.6); /* Fond sombre avec gradient */
     border-radius: 20px;
@@ -22,28 +23,28 @@
 
 .player-name {
     font-family: 'Roboto', sans-serif;
-    font-size: 3rem; /* Texte très grand */
+    font-size: 3rem; /* Taille du nom du joueur (inchangée) */
     font-weight: bold;
     color: #7fCC00; /* Couleur vert pomme */
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem; /* Réduit l'espacement en bas */
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Ombre plus marquée */
 }
 
 .player-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Deux colonnes */
-    gap: 15px; /* Espacement plus large */
+    gap: 20px; /* Espacement plus large */
     font-family: 'Roboto', sans-serif;
-    font-size: 1.5rem; /* Texte plus grand */
+    font-size: 2rem; /* Police des statistiques agrandie */
     color: #ffffff;
 }
 
 .player-stats div {
     text-align: left;
-    padding: 10px 15px; /* Plus d'espace autour du texte */
+    padding: 15px 20px; /* Plus d'espace autour du texte */
     background: rgba(255, 255, 255, 0.1); /* Fond transparent léger */
     border-radius: 10px; /* Coins arrondis */
-    font-size: 1.5rem; /* Texte plus grand */
+    font-size: 2.2rem; /* Texte des statistiques agrandi */
 }
 
 .player-stats div strong {
