@@ -41,7 +41,7 @@
 
 .player-stats div {
     text-align: left;
-    padding: 15px 20px; /* Plus d'espace autour du texte */
+    padding: 10px 10px; /* Plus d'espace autour du texte */
     background: rgba(255, 255, 255, 0.1); /* Fond transparent léger */
     border-radius: 10px; /* Coins arrondis */
     font-size: 2.5rem; /* Texte des statistiques agrandi */
