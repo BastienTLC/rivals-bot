@@ -122,22 +122,22 @@ function Recap() {
             >
                 <div className="player-stats">
                     <div>
-                        <strong>Équipe:</strong> {player.teamName}
+                        <strong>Team:</strong> {player.teamName}
                     </div>
                     <div>
-                        <strong>Kills:</strong> {player.kills}
+                        <strong>Kill:</strong> {player.kills}
                     </div>
                     <div>
-                        <strong>Deaths:</strong> {player.deaths}
+                        <strong>Mort:</strong> {player.deaths}
                     </div>
                     <div>
                         <strong>KD:</strong> {player.kdr?.toFixed(2) || 'N/A'}
                     </div>
                     <div>
-                        <strong>Accuracy:</strong> {player.accuracy}%
+                        <strong>Accu:</strong> {player.accuracy}%
                     </div>
                     <div>
-                        <strong>Damage:</strong> {Math.round(player.damageDone)}
+                        <strong>Dégât:</strong> {Math.round(player.damageDone)}
                     </div>
                 </div>
             </Card>
