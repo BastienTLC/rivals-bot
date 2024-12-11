@@ -31,7 +31,7 @@ function Recap() {
 
     useEffect(async () => {
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        const response = await axios.get(`${backendUrl}/api/twitch/channel/${channel}`);
+        const response = await axios.get(`${backendUrl}/api/rustData/players/${channel}`);
         console.log('Channel data fetched:', response.data);
         setChannelData(response.data);
     }, [channel]);
