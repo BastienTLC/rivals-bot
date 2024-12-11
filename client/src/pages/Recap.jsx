@@ -14,6 +14,7 @@ function Recap() {
     const query = useQuery();
     const playerName = query.get('playerName');
     const [playerData, setPlayerData] = useState(null);
+    const [channelData, setChannelData] = useState(null);
     const [teamData, setTeamData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [displayMode, setDisplayMode] = useState('single'); // 'single' or 'team'
@@ -28,6 +29,13 @@ function Recap() {
         }
     }, [scrollSpeed]);
 
+    useEffect(async () => {
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const response = await axios.get(`${backendUrl}/api/twitch/channel/${channel}`);
+        console.log('Channel data fetched:', response.data);
+        setChannelData(response.data);
+    }, [channel]);
+
 
     useEffect(() => {
         if (!channel) return;
@@ -36,7 +44,7 @@ function Recap() {
             try {
                 console.log(`Fetching player data for channel: ${channel}`);
                 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-                const response = await axios.get(`${backendUrl}/api/twitch/player/${channel}`);
+                const response = await axios.get(`${backendUrl}/api/rustData/players/${channel}`);
                 console.log('Player data fetched:', response.data);
                 setPlayerData(response.data);
 
@@ -81,7 +89,7 @@ function Recap() {
             const fetchTeamData = async () => {
                 try {
                     const backendUrl = import.meta.env.VITE_BACKEND_URL;
-                    const response = await axios.get(`${backendUrl}/api/rustData/teams/${channel}`);
+                    const response = await axios.get(`${backendUrl}/api/rustData/teams/${channelData.teamName}`);
                     console.log('Team data fetched:', response.data);
                     setTeamData(response.data.members);
                     setDisplayMode('team');
@@ -92,7 +100,7 @@ function Recap() {
 
             fetchTeamData();
         }
-    }, [lastFetchedName, playerData, displayMode, counter]);
+    }, [lastFetchedName, playerData, displayMode, counter, channelData]);
 
     if (loading) {
         console.log('Loading player data...');

@@ -61,6 +61,7 @@ async function fetchPlayerDetails(playerName) {
     return players.find(player => player.name.toLowerCase() === playerName.toLowerCase());
 }
 
+
 module.exports = {
     fetchAllTeams,
     fetchTeamDetails,
